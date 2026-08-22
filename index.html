@@ -760,6 +760,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       --roadmap-warm: rgba(247, 243, 232, 0.94);
       --roadmap-panel: rgba(255, 255, 255, 0.88);
       --roadmap-deep: #174d2c;
+      --roadmap-active: #2f7a4a;
       font-family: &quot;Vazirmatn&quot;, system-ui, sans-serif;
       color: var(--roadmap-ink);
       width: 100%;
@@ -1111,8 +1112,8 @@ html&gt;body{padding:0}&lt;/style&gt;
     }
 
     #stats-roadmap .dependency-svg .node.active {
-      fill: var(--roadmap-deep);
-      stroke: var(--roadmap-deep);
+      fill: var(--roadmap-active);
+      stroke: var(--roadmap-active);
     }
 
     #stats-roadmap .dependency-svg .node-text {
@@ -1510,10 +1511,10 @@ html&gt;body{padding:0}&lt;/style&gt;
         const prereqs = course.prereqs;
         const width = 440;
         const height = 192;
-        const activeX = 306;
-        const activeY = 70;
-        const activeW = 112;
-        const activeH = 56;
+        const activeX = 242;
+        const activeY = 54;
+        const activeW = 174;
+        const activeH = 84;
         const nodeW = 174;
         const nodeH = 42;
         const positions = prereqs.map((_, index) =&gt; {
@@ -1523,13 +1524,37 @@ html&gt;body{padding:0}&lt;/style&gt;
         });
 
         const node = (x, y, label, active = false, termLabel = &quot;&quot;) =&gt; {
-          const safeLabel = truncate(label);
-          const detail = termLabel ? `&lt;tspan x=&quot;${x + nodeW / 2}&quot; dy=&quot;15&quot; font-size=&quot;10&quot; opacity=&quot;0.72&quot;&gt;${termLabel}&lt;/tspan&gt;` : &quot;&quot;;
+          const boxWidth = active ? activeW : nodeW;
+          const boxHeight = active ? activeH : nodeH;
+          const lines = [];
+          const words = label.split(/\s+/);
+          const maxChars = active ? 17 : 25;
+          let line = &quot;&quot;;
+          words.forEach((word) =&gt; {
+            const next = line ? `${line} ${word}` : word;
+            if (line &amp;&amp; next.length &gt; maxChars) {
+              lines.push(line);
+              line = word;
+            } else {
+              line = next;
+            }
+          });
+          if (line) lines.push(line);
+          const safeLines = lines.slice(0, active ? 3 : 2).map((item, index, list) =&gt;
+            index === list.length - 1 &amp;&amp; item.length &gt; maxChars
+              ? `${item.slice(0, maxChars - 1)}…`
+              : item
+          );
+          const lineStart = y + (active ? 21 : 17);
+          const labelLines = safeLines.map((item, index) =&gt;
+            `&lt;tspan x=&quot;${x + boxWidth / 2}&quot; dy=&quot;${index === 0 ? 0 : 14}&quot;&gt;${item}&lt;/tspan&gt;`
+          ).join(&quot;&quot;);
+          const detail = termLabel ? `&lt;tspan x=&quot;${x + boxWidth / 2}&quot; dy=&quot;15&quot; font-size=&quot;10&quot; opacity=&quot;0.72&quot;&gt;${termLabel}&lt;/tspan&gt;` : &quot;&quot;;
           return `
             &lt;g&gt;
-              &lt;rect class=&quot;node${active ? &quot; active&quot; : &quot;&quot;}&quot; x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;${active ? activeW : nodeW}&quot; height=&quot;${active ? activeH : nodeH}&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
-              &lt;text class=&quot;node-text${active ? &quot; active-text&quot; : &quot;&quot;}&quot; x=&quot;${x + (active ? activeW : nodeW) / 2}&quot; y=&quot;${y + (active ? 23 : 17)}&quot; text-anchor=&quot;middle&quot;&gt;
-                &lt;tspan x=&quot;${x + (active ? activeW : nodeW) / 2}&quot;&gt;${safeLabel}&lt;/tspan&gt;${detail}
+              &lt;rect class=&quot;node${active ? &quot; active&quot; : &quot;&quot;}&quot; x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;${boxWidth}&quot; height=&quot;${boxHeight}&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
+              &lt;text class=&quot;node-text${active ? &quot; active-text&quot; : &quot;&quot;}&quot; x=&quot;${x + boxWidth / 2}&quot; y=&quot;${lineStart}&quot; text-anchor=&quot;middle&quot;&gt;
+                ${labelLines}${detail}
               &lt;/text&gt;
             &lt;/g&gt;
           `;
@@ -1562,7 +1587,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 
         dependencySummary.innerHTML = prereqs.length
           ? `&lt;strong&gt;${course.name}&lt;/strong&gt; به ${fa(prereqs.length)} پیش‌نیاز نیاز دارد: ${prereqs.join(&quot;، &quot;)}.`
-          : `&lt;strong&gt;${course.name}&lt;/strong&gt; در داده ارسالی پیش‌نیاز ندارد.`;
+          : `&lt;strong&gt;${course.name}&lt;/strong&gt; پیش‌نیاز ندارد.`;
       };
 
       const renderCourseDetail = (semester) =&gt; {
