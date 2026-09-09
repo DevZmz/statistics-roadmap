@@ -3523,17 +3523,17 @@ html>body{padding:0}</style>
       history.replaceState({ view: "roadmap" }, "");
       window.addEventListener("popstate", restoreViewFromHistory);
 
-      professorsNav?.addEventListener("click", showProfessors);
-      calendarNav?.addEventListener("click", showCalendar);
-      facultyNav?.addEventListener("click", showFaculty);
-      unitCounterNav?.addEventListener("click", showUnitCounter);
-      notesNav?.addEventListener("click", showNotes);
-      root.querySelector("#back-to-roadmap-notes")?.addEventListener("click", showRoadmap);
-      backToRoadmap?.addEventListener("click", showRoadmap);
-      backToProfessors?.addEventListener("click", showProfessors);
-      root.querySelector("#back-to-roadmap-calendar")?.addEventListener("click", showRoadmap);
-      root.querySelector("#back-to-roadmap-faculty")?.addEventListener("click", showRoadmap);
-      root.querySelector("#back-to-roadmap-unit-counter")?.addEventListener("click", showRoadmap);
+      professorsNav?.addEventListener("click", () => showProfessors());
+      calendarNav?.addEventListener("click", () => showCalendar());
+      facultyNav?.addEventListener("click", () => showFaculty());
+      unitCounterNav?.addEventListener("click", () => showUnitCounter());
+      notesNav?.addEventListener("click", () => showNotes());
+      root.querySelector("#back-to-roadmap-notes")?.addEventListener("click", () => showRoadmap());
+      backToRoadmap?.addEventListener("click", () => showRoadmap());
+      backToProfessors?.addEventListener("click", () => showProfessors());
+      root.querySelector("#back-to-roadmap-calendar")?.addEventListener("click", () => showRoadmap());
+      root.querySelector("#back-to-roadmap-faculty")?.addEventListener("click", () => showRoadmap());
+      root.querySelector("#back-to-roadmap-unit-counter")?.addEventListener("click", () => showRoadmap());
       unitCounterReset?.addEventListener("click", () => {
         unitCounterState.passedKeys.clear();
         renderUnitCounter();
