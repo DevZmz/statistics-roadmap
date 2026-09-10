@@ -936,6 +936,10 @@ html>body{padding:0}</style>
       line-height: 1.7;
     }
 
+    #stats-roadmap .professors-schedule-notice {
+      font-weight: 800;
+    }
+
     #stats-roadmap .professor-name {
       display: block;
       margin-bottom: 0.45rem;
@@ -1384,6 +1388,7 @@ html>body{padding:0}</style>
     }
     #stats-roadmap .notes-panel {
       color: #101010;
+      padding-bottom: clamp(4.5rem, 8vw, 5.5rem);
     }
 
     #stats-roadmap .unit-counter-panel {
@@ -1847,6 +1852,31 @@ html>body{padding:0}</style>
 
     #stats-roadmap .notes-download-mark[hidden] {
       display: none;
+    }
+    #stats-roadmap .notes-thanks-bar {
+      position: fixed;
+      z-index: 20;
+      left: 50%;
+      bottom: 0.75rem;
+      width: min(calc(100% - 1.5rem), 72rem);
+      transform: translateX(-50%);
+      box-sizing: border-box;
+      padding: 0.65rem 1rem;
+      border: 1px solid rgba(23, 77, 44, 0.18);
+      border-radius: 0.8rem;
+      background: #ffffff;
+      color: #101010;
+      box-shadow: 0 8px 22px rgba(22, 49, 31, 0.12);
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    #stats-roadmap .notes-thanks-name {
+      color: #e66f9b;
+      font-size: 1.08em;
+      font-weight: 900;
     }
 
     @media (max-width: 480px) {
@@ -2529,8 +2559,8 @@ html>body{padding:0}</style>
 
       <button class="nav-link" type="button" id="calendar-nav"></button>
       <button class="nav-link" type="button" id="faculty-nav"></button>
-      <button class="nav-link" type="button" id="unit-counter-nav"></button>
       <button class="nav-link" type="button" id="notes-nav">جزوه</button>
+      <button class="nav-link" type="button" id="unit-counter-nav"></button>
     </nav>
   </header>
 
@@ -2586,6 +2616,7 @@ html>body{padding:0}</style>
       <div>
         <h1 id="professors-title">اساتید گروه آمار دانشگاه اصفهان</h1>
         <p class="professors-hint" role="note">برای مشاهدهٔ اطلاعات هر استاد، روی کارت او کلیک کنید.</p>
+        <p class="professors-hint professors-schedule-notice" role="status">برنامهٔ هفتگی اساتید به‌زودی در به‌روزرسانی بعدی به این بخش اضافه می‌شود.</p>
       </div>
       <button class="nav-link" type="button" id="back-to-roadmap">بازگشت به چارت</button>
     </div>
@@ -2818,6 +2849,7 @@ html>body{padding:0}</style>
       <p class="notes-update-notice" role="status">برای دریافت جزوه، روی درس‌هایی که گزینهٔ DOWNLOAD دارند کلیک کنید. جزوه‌ها به‌تدریج به‌روزرسانی می‌شوند و درس‌های جدید نیز در ادامه به این بخش اضافه خواهند شد.</p>
       <div id="notes-term-list" aria-live="polite"></div>
     </div>
+    <div class="notes-thanks-bar" role="note">سپاس از <strong class="notes-thanks-name">Mahshad</strong> که با حوصله و دقت، فایل‌های جزوه را گردآوری کرد. ۱۴۰۵</div>
   </section>
   <script>
     (() => {
@@ -3043,7 +3075,8 @@ html>body{padding:0}</style>
           rank: "دانشیار",
           position: "رییس دانشکده ریاضی و آمار",
           email: "h.bidram@gmail.com",
-          website: "https://ris.ui.ac.ir/fa/profile/Hamid-Bidram", officePhone: "03137934578"
+          website: "https://ris.ui.ac.ir/fa/profile/Hamid-Bidram", officePhone: "03137934578",
+          photo: "hamid-bidram.png"
         },
         {
           name: "افشین پرورده",
@@ -3217,7 +3250,7 @@ html>body{padding:0}</style>
           unitCounterNextTerm.innerHTML = nextCourses.length
             ? `<ul class="unit-counter-advice-list">${nextCourses.map((course) => {
               const missing = counterMissingPrereqs(course, passedUnits, passedNames);
-              const availabilityText = generalCoursePattern.test(course.name)
+              const availabilityText = (generalCoursePattern.test(course.name) && course.name !== "ریاضی عمومی ۲")
                 ? "بدون پیشنیاز"
                 : (missing.length ? `فعلاً قابل اخذ نیست؛ پیش‌نیاز باقی‌مانده: ${missing.join("، ")}` : "پیش‌نیازهای ثبت‌شده پاس شده‌اند و قابل بررسی برای اخذ است.");
               return `<li class="unit-counter-advice-item"><strong>${course.name} · ${unitsText(course.units)}</strong><small>${availabilityText}</small></li>`;
@@ -3371,7 +3404,14 @@ html>body{padding:0}</style>
         ["ریاضی عمومی ۱", "https://drive.google.com/uc?export=download&id=18h6jNeRG40wNCIUpexFaIgt2aDfrRnux"],
         ["ریاضی عمومی ۲", "https://drive.google.com/uc?export=download&id=1NpEI9pZSzVaup7lu5kYqDwAElrPgG0EE"],
         ["جبرخطی برای آمار", "https://drive.google.com/uc?export=download&id=1hfb0lSjLoXU19EAg8NoNpkhwR75eMsHy"],
-        ["تحلیل گرافیکی و اکتشافی داده‌ها", "https://drive.google.com/uc?export=download&id=1AAZOf7Y5KFW-BdT8hojHtBr0WV8m3kOZ"]
+        ["تحلیل گرافیکی و اکتشافی داده‌ها", "https://drive.google.com/uc?export=download&id=1AAZOf7Y5KFW-BdT8hojHtBr0WV8m3kOZ"],
+        ["روش‌های نمونه‌گیری", "https://drive.google.com/uc?export=download&id=1EaDCowR-mbgWDFHmXapcjYMov_OxdWaM"],
+        ["نظریه آمار ۱", "https://drive.google.com/uc?export=download&id=1u6mD_OC7DLixP5HFMG6qNhhe-0lzAD6p"],
+        ["روش‌های عددی و شبیه‌سازی", "https://drive.google.com/uc?export=download&id=1-qVJbPrIMQUgKAG3Cb0A_KgHlM8pOYXZ"],
+        ["روش‌های آماری", "https://drive.google.com/uc?export=download&id=12wAnOsPCHclKz_zyaT6_A9CwL4zLiFNb"],
+        ["آنالیز ریاضی", "https://drive.google.com/uc?export=download&id=11waUrIRAlV6T9aAr6WbYbcmMnnMeEgP1"],
+        ["احتمال مقدماتی", "https://drive.google.com/uc?export=download&id=1A-FzplKCqDKTLnA4yrXmJZKuADX1MssH"],
+        ["احتمال ۱", "https://drive.google.com/uc?export=download&id=1aQXXILdrxu055L5KeFOKpD2pPkdxA6AU"]
       ]);
 
       const renderNotes = () => {
